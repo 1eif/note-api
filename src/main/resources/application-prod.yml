@@ -1,0 +1,29 @@
+spring:
+  #数据库配置
+  datasource:
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/note?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  #RabbitMQ
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: myhost
+
+#服务器端口
+server:
+  port: 9900
+
+#Sms短信宝
+sms:
+  username: 用户名
+  password: MD5加密的密码

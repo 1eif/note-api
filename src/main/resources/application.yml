@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    #配置文件 dev-开发环境  prod-生产环境
+    active: dev
+    #actice: prod
+
+#API通用前缀
+server:
+  servlet:
+    context-path: /api/v1
+
