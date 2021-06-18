@@ -3,6 +3,7 @@ package com.leif.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.leif.exception.ServiceException;
 import com.leif.mapper.UserMapper;
+import com.leif.model.dto.UserLoginDto;
 import com.leif.model.dto.UserRegisterDto;
 import com.leif.model.entity.User;
 import com.leif.service.UserService;
@@ -61,5 +62,29 @@ public class UserServiceImpl implements UserService {
         log.info("账号：{} 注册成功",userRegisterDto.getPhone());
 
         userMapper.insert(user);
+    }
+
+    /**
+     * 用户登录
+     *
+     * @param userLoginDto
+     * @return
+     */
+    @Override
+    public User login(UserLoginDto userLoginDto) {
+        //TODO 处理频繁登录错误的请求
+        //1. 根据手机号码查询User对象
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("phone", userLoginDto.getPhone()));
+        if (user == null) {
+            throw new ServiceException("账号或密码错误");
+        }
+
+        //2. 根据User中密码和数据库中密码比对
+        if (!StringUtils.equals(user.getPassword(), DigestUtils.md5Hex("aaabbb{{{<<<*" +userLoginDto.getPassword()))) {
+            throw new ServiceException("账号或密码错误");
+        }
+
+        log.info("用户：{} 成功登录系统， device：{}", userLoginDto.getPhone(), userLoginDto.getDevice());
+        return user;
     }
 }

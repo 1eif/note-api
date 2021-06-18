@@ -1,5 +1,6 @@
 package com.leif.service;
 
+import com.leif.model.dto.UserLoginDto;
 import com.leif.model.dto.UserRegisterDto;
 import com.leif.model.entity.User;
 
@@ -11,9 +12,11 @@ public interface UserService {
      * @param userRegisterDto
      */
     void userRegister(UserRegisterDto userRegisterDto);
+
     /**
-     *
-     * 用户登录 TODO
+     * 用户登录
+     * @param userLoginDto
+     * @return
      */
-    //User login() {}
+    User login(UserLoginDto userLoginDto);
 }

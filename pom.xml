@@ -99,6 +99,20 @@
 <!--            <artifactId>spring-boot-starter-jdbc</artifactId>-->
 <!--        </dependency>-->
 
+        <!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+
+        <!-- Sa-Token整合redis (使用jackson序列化方式) 用于后续分布式扩展-->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis-jackson</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+
 
     </dependencies>
 
