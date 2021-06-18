@@ -42,7 +42,6 @@ public class SendSmsServiceImpl implements SendSmsService {
         //1. 根据手机号判断60s内是否发过验证码，发过则抛出异常
         if (verifyCodeSendCache.isExists()) {
             log.error("{} 频繁亲求验证码接口，已被拒绝。",sendVerifyCodeDto.getPhone());
-            //TODO 抛异常
             throw new ServiceException("请不要频繁发送验证码");
         }
         //2. 产生6位数随机数作为验证码

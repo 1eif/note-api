@@ -20,6 +20,8 @@ public class SmsConsumer {
     private SmsApi smsApi;
 
     /**
+     * 注册一个MQ监听
+     *
      * @param dto
      */
     @RabbitListener(queuesToDeclare = @Queue("sms_queue"))
