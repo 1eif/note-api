@@ -1,7 +1,7 @@
 package com.leif.mq;
 
 
-import com.leif.model.dto.SendSmsDto;
+import com.leif.model.dto.request.SendSmsDto;
 import com.leif.util.SysConst;
 import com.leif.util.api.SmsApi;
 import lombok.extern.slf4j.Slf4j;

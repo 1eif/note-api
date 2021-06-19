@@ -1,4 +1,4 @@
-package com.leif.model.dto;
+package com.leif.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,10 +1,12 @@
 package com.leif.service;
 
-import com.leif.model.dto.UserLoginDto;
-import com.leif.model.dto.UserRegisterDto;
+import com.leif.model.dto.request.UserLoginDto;
+import com.leif.model.dto.request.UserRegisterDto;
 import com.leif.model.dto.request.ForgetPasswordSetNewPasswordDto;
 import com.leif.model.dto.request.ForgetPasswordValidateUserDto;
 import com.leif.model.dto.request.ForgetPasswordValidateVerifyCodeDto;
+import com.leif.model.dto.request.UserSettingDto;
+import com.leif.model.dto.respons.UserInfoRespDto;
 import com.leif.model.entity.User;
 
 public interface UserService {
@@ -24,6 +26,19 @@ public interface UserService {
     User login(UserLoginDto userLoginDto);
 
     /**
+     * 修改昵称或密码
+     * @param userSettingDto
+     */
+    void changeNickNameAndPassword(UserSettingDto userSettingDto);
+
+    /**
+     * 用户详细信息
+     * @param userID
+     * @return
+     */
+    UserInfoRespDto getUserInfo(String userID);
+
+    /**
      * 忘记密码：验证用户有效性
      * @param forgetPasswordValidateUserDto
      * @return
@@ -41,4 +56,5 @@ public interface UserService {
      * @param forgetPasswordSetNewPasswordDto
      */
     void forgetSetNewPassword(ForgetPasswordSetNewPasswordDto forgetPasswordSetNewPasswordDto);
+
 }

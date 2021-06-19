@@ -3,11 +3,13 @@ package com.leif.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.leif.exception.ServiceException;
 import com.leif.mapper.UserMapper;
-import com.leif.model.dto.UserLoginDto;
-import com.leif.model.dto.UserRegisterDto;
+import com.leif.model.dto.request.UserLoginDto;
+import com.leif.model.dto.request.UserRegisterDto;
 import com.leif.model.dto.request.ForgetPasswordSetNewPasswordDto;
 import com.leif.model.dto.request.ForgetPasswordValidateUserDto;
 import com.leif.model.dto.request.ForgetPasswordValidateVerifyCodeDto;
+import com.leif.model.dto.request.UserSettingDto;
+import com.leif.model.dto.respons.UserInfoRespDto;
 import com.leif.model.entity.User;
 import com.leif.service.UserService;
 import com.leif.util.DateTimeUtil;
@@ -93,6 +95,66 @@ public class UserServiceImpl implements UserService {
 
         log.info("用户：{} 成功登录系统， device：{}", userLoginDto.getPhone(), userLoginDto.getDevice());
         return user;
+    }
+
+    /**
+     * 修改昵称或密码
+     * @param userSettingDto
+     */
+    @Override
+    public void changeNickNameAndPassword(UserSettingDto userSettingDto) {
+        User user = userMapper.selectById(userSettingDto.getUserId());
+        if (user == null) {
+            throw new ServiceException("用户不存在");
+        }
+
+        //如果NickName不为空，则修改
+        if(StringUtils.isNoneEmpty(userSettingDto.getNickName())) {
+            user.setNickName(userSettingDto.getNickName());
+        }
+
+        //如果原始密码和新密码不为空，则修改
+        if (StringUtils.isNoneEmpty(userSettingDto.getNewPassword(), userSettingDto.getOldPassword())) {
+            //旧密码是否正确
+            if (!user.getPassword().equals(DigestUtils.md5Hex(SysConst.USER_PASSWORD_SALT + userSettingDto.getOldPassword()))) {
+                throw new ServiceException("原始密码错误");
+            }
+            user.setPassword(DigestUtils.md5Hex(SysConst.USER_PASSWORD_SALT + userSettingDto.getNewPassword()));
+        }
+        //更新
+        userMapper.updateById(user);
+        log.info("用户：{}资料更新成功：{}", userSettingDto.getUserId(), user);
+    }
+
+    /**
+     * 用户详细信息
+     * @param userID
+     * @return
+     */
+    @Override
+    public UserInfoRespDto getUserInfo(String userID) {
+        User user = userMapper.selectById(userID);
+        if (user == null) {
+            log.error("获取用户详细信息，用户ID异常：{}", userID);
+            throw new ServiceException("用户不存在");
+        }
+
+        UserInfoRespDto userInfoRespDto = new UserInfoRespDto();
+        userInfoRespDto.setUserID(user.getId());
+        userInfoRespDto.setNickName(user.getNickName());
+        userInfoRespDto.setUserStatus(user.getStatus());
+        userInfoRespDto.setJoinDate(user.getCreateTime());
+        //计算距今天数
+        userInfoRespDto.setJoinDays(DateTimeUtil.daysBetweenNow(user.getCreateTime()));
+
+        //TODO 获取tag数量
+        userInfoRespDto.setTagNums(0);
+        //TODO　获取memo数量
+        userInfoRespDto.setMemoNums(0);
+
+        log.info("获取用户详细信息：{}", userInfoRespDto);
+
+        return userInfoRespDto;
     }
 
     /**

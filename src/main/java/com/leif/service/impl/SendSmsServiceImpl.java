@@ -1,8 +1,8 @@
 package com.leif.service.impl;
 
 import com.leif.exception.ServiceException;
-import com.leif.model.dto.SendSmsDto;
-import com.leif.model.dto.SendVerifyCodeDto;
+import com.leif.model.dto.request.SendSmsDto;
+import com.leif.model.dto.request.SendVerifyCodeDto;
 import com.leif.service.SendSmsService;
 import com.leif.util.SysConst;
 import com.leif.util.api.SmsApi;

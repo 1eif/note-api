@@ -2,11 +2,13 @@ package com.leif.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.leif.model.dto.UserLoginDto;
-import com.leif.model.dto.UserRegisterDto;
+import com.leif.model.dto.request.UserLoginDto;
+import com.leif.model.dto.request.UserRegisterDto;
 import com.leif.model.dto.request.ForgetPasswordSetNewPasswordDto;
 import com.leif.model.dto.request.ForgetPasswordValidateUserDto;
 import com.leif.model.dto.request.ForgetPasswordValidateVerifyCodeDto;
+import com.leif.model.dto.request.UserSettingDto;
+import com.leif.model.dto.respons.UserInfoRespDto;
 import com.leif.model.entity.User;
 import com.leif.service.UserService;
 import com.leif.util.result.ApiResult;
@@ -61,6 +63,31 @@ public class UserController {
     }
 
     /**
+     * 修改用户信息 昵称 密码
+     * @param userSettingDto
+     * @return
+     */
+    @PostMapping("/user/setting")
+    public ApiResult updateUser(@RequestBody UserSettingDto userSettingDto) {
+        //获取当前登录用户ID
+        String userId = StpUtil.getLoginIdAsString();
+        userSettingDto.setUserId(userId);
+        userService.changeNickNameAndPassword(userSettingDto);
+        return ApiResult.SUCCESS();
+    }
+
+    /**
+     * 获取用户详细信息
+     * @return
+     */
+    @PostMapping("/user/info")
+    public ApiResult userInfo() {
+        String userID = StpUtil.getLoginIdAsString();
+        UserInfoRespDto userInfoRespDto = userService.getUserInfo(userID);
+        return ApiResult.SUCCESS(userInfoRespDto);
+    }
+
+    /**
      * 忘记密码：验证用户有效性
      * @param forgetPasswordValidateUserDto
      * @return
@@ -72,7 +99,7 @@ public class UserController {
     }
 
     /**
-     * 验证验证码有效性
+     * 忘记密码：验证验证码有效性
      * @param forgetPasswordValidateVerifyCodeDto
      * @return
      */
@@ -82,9 +109,16 @@ public class UserController {
         return ApiResult.SUCCESS();
     }
 
+    /**
+     * 忘记密码：重新设置密码
+     * @param forgetPasswordSetNewPasswordDto
+     * @return
+     */
     @PostMapping("/forget/new_password")
     public ApiResult forgetSetNewPassword(@RequestBody ForgetPasswordSetNewPasswordDto forgetPasswordSetNewPasswordDto) {
         userService.forgetSetNewPassword(forgetPasswordSetNewPasswordDto);
         return ApiResult.SUCCESS();
     }
+
+
 }

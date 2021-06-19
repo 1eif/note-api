@@ -1,6 +1,6 @@
 package com.leif.service;
 
-import com.leif.model.dto.SendVerifyCodeDto;
+import com.leif.model.dto.request.SendVerifyCodeDto;
 
 public interface SendSmsService {
 

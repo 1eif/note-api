@@ -53,14 +53,20 @@ public class ApiResult<T> {//泛型类
      *
      * @return
      */
-    public static ApiResult FAIL() {
-        return  new ApiResult(CommonsResultCode.FAIL);
-    }
+    public static ApiResult FAIL() { return new ApiResult(CommonsResultCode.FAIL); }
 
-    public static ApiResult<?> FAIL(String message) {
-        ApiResult responseResult = new ApiResult<>();
+    public static ApiResult FAIL(String message) {
+        ApiResult responseResult = new ApiResult();
         responseResult.success = false;
         responseResult.code = -1;
+        responseResult.message = message;
+        return  responseResult;
+    }
+
+    public static ApiResult FAIL(Integer code, String message) {
+        ApiResult responseResult = new ApiResult();
+        responseResult.success = false;
+        responseResult.code = code;
         responseResult.message = message;
         return  responseResult;
     }

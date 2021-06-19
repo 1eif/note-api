@@ -1,6 +1,6 @@
 package com.leif.controller;
 
-import com.leif.model.dto.SendVerifyCodeDto;
+import com.leif.model.dto.request.SendVerifyCodeDto;
 import com.leif.model.dto.respons.ImageVerificationCodeRespDto;
 import com.leif.service.ImageVerificationCodeService;
 import com.leif.service.SendSmsService;
