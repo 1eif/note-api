@@ -4,6 +4,9 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.leif.model.dto.UserLoginDto;
 import com.leif.model.dto.UserRegisterDto;
+import com.leif.model.dto.request.ForgetPasswordSetNewPasswordDto;
+import com.leif.model.dto.request.ForgetPasswordValidateUserDto;
+import com.leif.model.dto.request.ForgetPasswordValidateVerifyCodeDto;
 import com.leif.model.entity.User;
 import com.leif.service.UserService;
 import com.leif.util.result.ApiResult;
@@ -46,10 +49,42 @@ public class UserController {
         //return ApiResult.SUCCESS(user);
     }
 
+    /**
+     * 安全退出
+     * @return
+     */
     @PostMapping("/logout")
     public ApiResult logout() {
         log.info("用户：{}安全退出系统 Device：{}",StpUtil.getLoginId(), StpUtil.getLoginDevice());
         StpUtil.logout();
         return ApiResult.SUCCESS("退出成功");
+    }
+
+    /**
+     * 忘记密码：验证用户有效性
+     * @param forgetPasswordValidateUserDto
+     * @return
+     */
+    @PostMapping("/forget/validate_user")
+    public ApiResult forgetValidateUser(@RequestBody ForgetPasswordValidateUserDto forgetPasswordValidateUserDto) {
+        String token = userService.forgetValidateUser(forgetPasswordValidateUserDto);
+        return ApiResult.SUCCESS(token);
+    }
+
+    /**
+     * 验证验证码有效性
+     * @param forgetPasswordValidateVerifyCodeDto
+     * @return
+     */
+    @PostMapping("/forget/validate_verify_code")
+    public ApiResult  forgetValidateVerifyCode(@RequestBody ForgetPasswordValidateVerifyCodeDto forgetPasswordValidateVerifyCodeDto) {
+        userService.forgetValidateVerifyCode(forgetPasswordValidateVerifyCodeDto);
+        return ApiResult.SUCCESS();
+    }
+
+    @PostMapping("/forget/new_password")
+    public ApiResult forgetSetNewPassword(@RequestBody ForgetPasswordSetNewPasswordDto forgetPasswordSetNewPasswordDto) {
+        userService.forgetSetNewPassword(forgetPasswordSetNewPasswordDto);
+        return ApiResult.SUCCESS();
     }
 }

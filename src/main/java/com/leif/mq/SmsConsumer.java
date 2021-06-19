@@ -2,6 +2,7 @@ package com.leif.mq;
 
 
 import com.leif.model.dto.SendSmsDto;
+import com.leif.util.SysConst;
 import com.leif.util.api.SmsApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -24,7 +25,7 @@ public class SmsConsumer {
      *
      * @param dto
      */
-    @RabbitListener(queuesToDeclare = @Queue("sms_queue"))
+    @RabbitListener(queuesToDeclare = @Queue(SysConst.MqQueueName.SMS_QUEUE))
     public void sendSms(SendSmsDto dto) {
         //smsApi.sendSms(dto.getPhone(), dto.getMessage());
     }
