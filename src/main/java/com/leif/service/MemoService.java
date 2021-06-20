@@ -2,6 +2,7 @@ package com.leif.service;
 
 import com.leif.model.dto.request.CreateMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
+import com.leif.model.entity.Memo;
 
 import java.util.List;
 
@@ -27,5 +28,5 @@ public interface MemoService {
      * @param queryTag
      * @return
      */
-    List<String> findAllMemo(String userId, String queryTag);
+    List<Memo> findAllMemo(String userId, String queryTag);
 }

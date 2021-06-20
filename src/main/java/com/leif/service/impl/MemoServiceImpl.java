@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -128,7 +129,9 @@ public class MemoServiceImpl implements MemoService {
      */
     @Override
     public List<String> findUserTagNames(String userId) {
-        return null;
+        List<Tags> tagList = tagsMapper.selectList(new QueryWrapper<Tags>().eq("user_id", userId));
+        //MapReduce
+        return tagList.stream().map(tag -> tag.getTag()).collect(Collectors.toList());
     }
 
     /**
@@ -139,7 +142,10 @@ public class MemoServiceImpl implements MemoService {
      * @return
      */
     @Override
-    public List<String> findAllMemo(String userId, String queryTag) {
-        return null;
+    public List<Memo> findAllMemo(String userId, String queryTag) {
+        if (StringUtils.isNoneEmpty(queryTag)) {
+            return memoMapper.findMemoByTagName(userId, "#" + queryTag);
+        }
+        return memoMapper.selectList(new QueryWrapper<Memo>().eq("user_id", userId).orderByDesc("id"));
     }
 }

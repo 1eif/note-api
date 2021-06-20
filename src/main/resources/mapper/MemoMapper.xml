@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "- //mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leif.mapper.MemoMapper">
+    <select id="findMemoByTagName" resultType="com.leif.model.entity.Memo">
+        SELECT
+            memo.*
+        FROM
+            memo
+                INNER JOIN memo_tags ON memo.id = memo_tags.memo_id
+                INNER JOIN tags ON tags.id = memo_tags.tags_id
+        WHERE tags.tag = #{tagName}
+            AND tags.user_id = #{userId}
+        ORDER BY
+                memo.id DESC
+    </select>
+</mapper>
