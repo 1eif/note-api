@@ -16,14 +16,14 @@
 
     <select id="findDailyCount" resultMap="memoCountMap">
         SELECT
-            date( creat_time ) AS daily,
+            date( create_time ) AS daily,
             count(*) AS 'count'
         FROM
             memo
         WHERE
             user_id = #{userId}
         GROUP BY
-            DATE( creat_time )
+            DATE( create_time )
             LIMIT 60;
     </select>
     

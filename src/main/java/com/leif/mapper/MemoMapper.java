@@ -22,5 +22,10 @@ public interface MemoMapper extends BaseMapper<Memo> {
      */
     List<Memo> findMemoByTagName(@Param("userId") String userId, @Param("tagName") String tagName);
 
+    /**
+     * 查询60日内Memo数量 返回值封装为Map
+     * @param userId
+     * @return
+     */
     List<Map> findDailyCount(@Param("userId") String userId);
 }

@@ -239,7 +239,17 @@ public class MemoServiceImpl implements MemoService {
         }
     }
 
-    private Memo findByUserIdAndMemoId(String userId, String emoId) {
+    /**
+     * 确保Memo为此用户所有
+     * @param userId
+     * @param memoId
+     * @return
+     */
+    private Memo findByUserIdAndMemoId(String userId, String memoId) {
+        Memo memo = memoMapper.selectById(memoId);
+        if(memo.getUserId().equals(userId)){
+            return memo;
+        }
 
         return null;
     }
