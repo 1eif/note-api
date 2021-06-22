@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.leif.model.dto.request.CreateMemoDto;
 import com.leif.model.dto.request.EditMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
+import com.leif.model.dto.respons.DailyMemoCountRespDto;
 import com.leif.model.entity.Memo;
 import com.leif.service.MemoService;
 import com.leif.util.result.ApiResult;
@@ -58,7 +59,7 @@ public class MemoController {
     }
 
     /**
-     * 根据MemoId删除Memo
+     * 删除Memo
      * @param memoId
      * @return
      */
@@ -70,12 +71,28 @@ public class MemoController {
 
     }
 
+    /**
+     * 编辑Memo
+     * @param editMemoDto
+     * @return
+     */
     @PostMapping("/edit")
     public ApiResult editMemo(@RequestBody EditMemoDto editMemoDto) {
         String userId = StpUtil.getLoginIdAsString();
         editMemoDto.setUserId(userId);
         Memo memo = memoService.editMemo(editMemoDto);
         return ApiResult.SUCCESS(memo);
+    }
+
+    /**
+     * 查询60日内Memo数量
+     * @return
+     */
+    @PostMapping("/daily_count")
+    public ApiResult dailyMemoCount() {
+        String userId = StpUtil.getLoginIdAsString();
+        DailyMemoCountRespDto dailyMemoCountRespDto = memoService.dailyMemoCount(userId);
+        return ApiResult.SUCCESS(dailyMemoCountRespDto);
     }
 
 }

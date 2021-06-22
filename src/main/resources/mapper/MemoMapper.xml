@@ -13,4 +13,22 @@
         ORDER BY
                 memo.id DESC
     </select>
+
+    <select id="findDailyCount" resultMap="memoCountMap">
+        SELECT
+            date( creat_time ) AS daily,
+            count(*) AS 'count'
+        FROM
+            memo
+        WHERE
+            user_id = #{userId}
+        GROUP BY
+            DATE( creat_time )
+            LIMIT 60;
+    </select>
+    
+    <resultMap id="memoCountMap" type="java.util.Map">
+        <result column="daily" property="daily" javaType="String" />
+        <result column="count" property="count" javaType="Integer" />
+    </resultMap>
 </mapper>

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MemoMapper extends BaseMapper<Memo> {
@@ -20,4 +21,6 @@ public interface MemoMapper extends BaseMapper<Memo> {
      * @return
      */
     List<Memo> findMemoByTagName(@Param("userId") String userId, @Param("tagName") String tagName);
+
+    List<Map> findDailyCount(@Param("userId") String userId);
 }

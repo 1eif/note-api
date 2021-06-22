@@ -3,6 +3,7 @@ package com.leif.service;
 import com.leif.model.dto.request.CreateMemoDto;
 import com.leif.model.dto.request.EditMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
+import com.leif.model.dto.respons.DailyMemoCountRespDto;
 import com.leif.model.entity.Memo;
 
 import java.util.List;
@@ -44,4 +45,12 @@ public interface MemoService {
      * @return
      */
     Memo editMemo(EditMemoDto editMemoDto);
+
+    /**
+     * 查询60日内Memo数量
+     * @param userId
+     * @return
+     */
+    DailyMemoCountRespDto dailyMemoCount(String userId);
+
 }

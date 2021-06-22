@@ -8,6 +8,7 @@ import com.leif.mapper.TagsMapper;
 import com.leif.model.dto.request.CreateMemoDto;
 import com.leif.model.dto.request.EditMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
+import com.leif.model.dto.respons.DailyMemoCountRespDto;
 import com.leif.model.entity.Memo;
 import com.leif.model.entity.MemoTags;
 import com.leif.model.entity.Tags;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -200,6 +202,20 @@ public class MemoServiceImpl implements MemoService {
         saveMemoTags(memo);
 
         return memo;
+    }
+
+    /**
+     * 查询60日内Memo数量
+     * @param userId
+     * @return
+     */
+    @Override
+    public DailyMemoCountRespDto dailyMemoCount(String userId) {
+        List<Map> list = memoMapper.findDailyCount(userId);
+
+        DailyMemoCountRespDto dailyMemoCountRespDto = new DailyMemoCountRespDto();
+        dailyMemoCountRespDto.setDailyCount(list);
+        return dailyMemoCountRespDto;
     }
 
     /**
