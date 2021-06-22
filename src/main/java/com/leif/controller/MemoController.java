@@ -2,6 +2,7 @@ package com.leif.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.leif.model.dto.request.CreateMemoDto;
+import com.leif.model.dto.request.EditMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
 import com.leif.model.entity.Memo;
 import com.leif.service.MemoService;
@@ -50,11 +51,31 @@ public class MemoController {
      * @return
      */
     @PostMapping("/list")
-    public ApiResult showAllMemo (String queryTag) {
+    public ApiResult showAllMemo(String queryTag) {
         String userId = StpUtil.getLoginIdAsString();
         List<Memo> memoList = memoService.findAllMemo(userId, queryTag);
         return ApiResult.SUCCESS(memoList);
     }
 
+    /**
+     * 根据MemoId删除Memo
+     * @param memoId
+     * @return
+     */
+    @PostMapping("/del")
+    public ApiResult delMemo(String memoId) {
+        String userId = StpUtil.getLoginIdAsString();
+        memoService.delMemo(userId, memoId);
+        return ApiResult.SUCCESS();
+
+    }
+
+    @PostMapping("/edit")
+    public ApiResult editMemo(@RequestBody EditMemoDto editMemoDto) {
+        String userId = StpUtil.getLoginIdAsString();
+        editMemoDto.setUserId(userId);
+        Memo memo = memoService.editMemo(editMemoDto);
+        return ApiResult.SUCCESS(memo);
+    }
 
 }

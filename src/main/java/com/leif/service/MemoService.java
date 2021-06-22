@@ -1,6 +1,7 @@
 package com.leif.service;
 
 import com.leif.model.dto.request.CreateMemoDto;
+import com.leif.model.dto.request.EditMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
 import com.leif.model.entity.Memo;
 
@@ -29,4 +30,18 @@ public interface MemoService {
      * @return
      */
     List<Memo> findAllMemo(String userId, String queryTag);
+
+    /**
+     * 根据MemoId删除该用户的Memo
+     * @param userId
+     * @param memoId
+     */
+    void delMemo(String userId, String memoId);
+
+    /**
+     * 修改Memo
+     * @param editMemoDto
+     * @return
+     */
+    Memo editMemo(EditMemoDto editMemoDto);
 }

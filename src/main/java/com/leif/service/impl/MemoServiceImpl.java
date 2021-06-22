@@ -1,10 +1,12 @@
 package com.leif.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.leif.exception.ServiceException;
 import com.leif.mapper.MemoMapper;
 import com.leif.mapper.MemoTagsMapper;
 import com.leif.mapper.TagsMapper;
 import com.leif.model.dto.request.CreateMemoDto;
+import com.leif.model.dto.request.EditMemoDto;
 import com.leif.model.dto.respons.CreateMemoRespDto;
 import com.leif.model.entity.Memo;
 import com.leif.model.entity.MemoTags;
@@ -148,4 +150,83 @@ public class MemoServiceImpl implements MemoService {
         }
         return memoMapper.selectList(new QueryWrapper<Memo>().eq("user_id", userId).orderByDesc("id"));
     }
+
+    /**
+     * 根据MemoId删除该用户的Memo
+     * @param userId
+     * @param memoId
+     */
+    @Override
+    @Transactional //事务：保证此部分代码全部运行成功或失败，不允许部分失败部分成功，出错则回滚
+    public void delMemo(String userId, String memoId) {
+        Memo memo = memoMapper.selectById(memoId);
+        if(memo == null) {
+            throw new ServiceException("笔记不存在");
+        }
+
+        if(!memo.getUserId().equals(userId)) {
+            throw new ServiceException("没有权限删除");
+        }
+
+        memoMapper.deleteById(memoId);
+        log.info("用户：{}，删除Memo：{}", userId, memo);
+
+        //根据MemoID删除对应Tag
+        deleTagByMemoID(memoId);
+    }
+
+    /**
+     * 修改Memo
+     * @param editMemoDto
+     * @return
+     */
+    @Override
+    @Transactional //事务：保证此部分代码全部运行成功或失败，不允许部分失败部分成功，出错则回滚
+    public Memo editMemo(EditMemoDto editMemoDto) {
+        Memo memo = findByUserIdAndMemoId(editMemoDto.getUserId(), editMemoDto.getMemoId());
+        if(memo == null) {
+            throw new ServiceException("笔记不存在");
+        }
+        // 1. 删除当前旧Memo中对应的所有Tag
+        deleTagByMemoID(memo.getId());
+
+        // 2. 设置新的内容
+        memo.setContent(editMemoDto.getContent());
+        memoMapper.updateById(memo);
+
+        log.info("用户：{}修改了Memo：{} device：{}", editMemoDto.getUserId(), memo.getContent(), editMemoDto.getDevice());
+
+        // 3. 保存新Memo中的Tag
+        saveMemoTags(memo);
+
+        return memo;
+    }
+
+    /**
+     * 根据MemoID删除对应Tag
+     * @param memoID
+     */
+    private void deleTagByMemoID(String memoID) {
+        // 查看Memo中是否有Tag，如果有，判断这个Tag是否有其他Memo在用，如果没有，则删除
+        List<MemoTags> memoTagsList = memoTagsMapper.selectList(new QueryWrapper<MemoTags>().eq("memo_id", memoID));
+        for(MemoTags memoTags :memoTagsList) {
+            //ne:除了当前这个Memo
+            List<MemoTags> subList = memoTagsMapper.selectList(new QueryWrapper<MemoTags>().eq("tags_id", memoTags.getTagsId()).ne("memo_id",memoID));
+            if(subList.isEmpty()) {
+                tagsMapper.deleteById(memoTags.getTagsId());
+                log.info("级联删除无引用的Tag：{}",memoTags.getTagsId());
+            }
+
+            memoTagsMapper.deleteById(memoTags.getId());
+            log.debug("删除Memo和Tag的对应关系表");
+
+        }
+    }
+
+    private Memo findByUserIdAndMemoId(String userId, String emoId) {
+
+        return null;
+    }
+
+
 }
