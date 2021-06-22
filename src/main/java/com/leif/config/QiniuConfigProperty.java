@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "sms")
-public class SmsConfigProperty {
+@ConfigurationProperties(prefix = "qiniu")
+public class QiniuConfigProperty {
 
-    private String username;
-    private String password;
+    private String accessKey;
+    private String secretKey;
+    private String bucket;
+    private String domain;
 }

@@ -1,5 +1,6 @@
 package com.leif.model.dto.request;
 
+import com.leif.model.entity.MemoFiles;
 import lombok.Data;
 
 @Data
@@ -12,7 +13,7 @@ public class CreateMemoDto {
     //设备
     private String device;
     //关联的文件ID
-    private String[] fileIds;
+    private MemoFiles[] fileList;
     //当前用户id
     private String userId;
 

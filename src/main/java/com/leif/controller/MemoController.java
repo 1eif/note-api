@@ -7,6 +7,7 @@ import com.leif.model.dto.respons.CreateMemoRespDto;
 import com.leif.model.dto.respons.DailyMemoCountRespDto;
 import com.leif.model.entity.Memo;
 import com.leif.service.MemoService;
+import com.leif.util.QiniuUtil;
 import com.leif.util.result.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,9 @@ public class MemoController {
 
     @Autowired
     private MemoService memoService;
+
+    @Autowired
+    private QiniuUtil qiniuUtil;
 
     /**
      * 新建Memo
@@ -93,6 +97,16 @@ public class MemoController {
         String userId = StpUtil.getLoginIdAsString();
         DailyMemoCountRespDto dailyMemoCountRespDto = memoService.dailyMemoCount(userId);
         return ApiResult.SUCCESS(dailyMemoCountRespDto);
+    }
+
+    /**
+     * 获取文件上传token
+     * @return
+     */
+    @PostMapping("/file/token")
+    public ApiResult updateFile() {
+        String token = qiniuUtil.getUploadToken();
+        return ApiResult.SUCCESS(token);
     }
 
 }
