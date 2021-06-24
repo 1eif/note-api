@@ -11,6 +11,7 @@ import com.leif.model.dto.request.UserSettingDto;
 import com.leif.model.dto.respons.UserInfoRespDto;
 import com.leif.model.entity.User;
 import com.leif.service.UserService;
+import com.leif.service.WeChatService;
 import com.leif.util.result.ApiResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WeChatService weChatService;
 
     /**
      * 用户注册
@@ -87,6 +91,13 @@ public class UserController {
         return ApiResult.SUCCESS(userInfoRespDto);
     }
 
+    @PostMapping("/user/wx/qrcode")
+    public ApiResult getWeChatQrcode() {
+        String userID = StpUtil.getLoginIdAsString();
+        String qrCodeUrl = weChatService.sceneQrcode(userID);
+        return ApiResult.SUCCESS(qrCodeUrl);
+    }
+
     /**
      * 忘记密码：验证用户有效性
      * @param forgetPasswordValidateUserDto
@@ -119,6 +130,7 @@ public class UserController {
         userService.forgetSetNewPassword(forgetPasswordSetNewPasswordDto);
         return ApiResult.SUCCESS();
     }
+
 
 
 }

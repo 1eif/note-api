@@ -22,7 +22,13 @@ public class WebConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(new SaRouteInterceptor((req, res, handler)->{
             // 根据路由划分模块，不同模块不同鉴权
             //排除
-            SaRouter.match(Arrays.asList("/**"), Arrays.asList("/common/**", "/register", "/login", "/forget/**"),() -> StpUtil.checkLogin());
+            SaRouter.match(Arrays.asList("/**"), Arrays.asList(
+                    "/common/**",
+                    "/register",
+                    "/login",
+                    "/forget/**",
+                    "/wechat/**"
+            ),() -> StpUtil.checkLogin());
 
         })).addPathPatterns("/**");
     }

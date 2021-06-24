@@ -27,3 +27,18 @@ server:
 sms:
   username: 用户名
   password: MD5加密的密码
+
+#七牛云
+qiniu:
+  accessKey:
+  secretKey:
+  bucket:
+  domain:
+
+#微信公众号
+wechat:
+  appId:
+  appSecret:
+  token:
+  aesKey:
+  id:

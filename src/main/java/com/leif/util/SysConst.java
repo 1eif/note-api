@@ -40,5 +40,9 @@ public interface SysConst {
          * 忘记密码：发送手机验证码
          */
         String FORGET_PASSWORD_SEND_VERIFY = "forget:send:verify:code:";
+        /**
+         * WeChatToken
+         */
+        String WECHAT_ACCESS_TOKEN = "wechat:access:token:";
     }
 }
