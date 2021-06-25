@@ -24,4 +24,21 @@ public interface WeChatService {
      * @return
      */
     String sceneQrcode(String userId);
+
+    /**
+     * 明文信息处理
+     * @param message
+     * @return
+     */
+    String callbackEvent(String message);
+
+    /**
+     * 密文信息处理
+     * @param message
+     * @param nonce
+     * @param timeStamp
+     * @param msgSigature
+     * @return
+     */
+    String callbackEvent(String message, String nonce, String timeStamp, String msgSigature);
 }

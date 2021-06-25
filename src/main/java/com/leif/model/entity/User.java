@@ -31,5 +31,7 @@ public class User {
     private String password;
     private String createTime;
     private int status;
+    private String wxOpenId;
+
 
 }

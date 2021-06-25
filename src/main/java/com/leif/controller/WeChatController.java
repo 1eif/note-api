@@ -1,14 +1,16 @@
 package com.leif.controller;
 
-import com.leif.exception.ServiceException;
 import com.leif.service.WeChatService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/wechat")
@@ -32,8 +34,8 @@ public class WeChatController {
             String signature = request.getParameter("signature");
             String nonce = request.getParameter("nonce");
             String timestamp = request.getParameter("timestamp");
-            String echostr = request.getParameter("echostr");
 
+            String echostr = request.getParameter("echostr");
             String checkResult = weChatService.checkSignature(signature, nonce, timestamp);
             if(StringUtils.isNoneEmpty(checkResult)) {
                 return "error";
@@ -43,9 +45,29 @@ public class WeChatController {
                 return echostr;
             }
 
-        } catch (Exception e) {
-            throw new ServiceException("微信服务器接入失败", e);
+            //获取加密类型 如果是密文，则为aes
+            String encryptType = request.getParameter("encrypt_type");
+            //获取加密密匙
+            String msgSignature = request.getParameter("msg_signature");
+            log.info("encryptType:{}, msgSignature:{}",encryptType, msgSignature);
+            //获取消息内容
+            String message = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
+
+            String result = null;
+            if (StringUtils.equals("aes", encryptType)) {
+                //如果是密文
+                result = weChatService.callbackEvent(message, nonce, timestamp, msgSignature);
+
+            } else {
+                //如果是明文
+                result = weChatService.callbackEvent(message);
+            }
+            return result;
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "success";
         }
-        return null;
     }
 }

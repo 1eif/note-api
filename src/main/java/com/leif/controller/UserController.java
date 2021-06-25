@@ -91,6 +91,10 @@ public class UserController {
         return ApiResult.SUCCESS(userInfoRespDto);
     }
 
+    /**
+     * 获取绑定微信二维码
+     * @return
+     */
     @PostMapping("/user/wx/qrcode")
     public ApiResult getWeChatQrcode() {
         String userID = StpUtil.getLoginIdAsString();
